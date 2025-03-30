@@ -9,11 +9,22 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StreamCardProps } from '@/components/stream/StreamCard';
-import { Heart, Share2, Users } from 'lucide-react';
+import { Heart, Share2, Users, Calendar, MapPin, Link, Clock, Trophy } from 'lucide-react';
 import { toast } from "sonner";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 // Mock stream data (in a real app would fetch based on ID)
-const STREAMS: Record<string, StreamCardProps & { description: string }> = {
+const STREAMS: Record<string, StreamCardProps & { 
+  description: string;
+  streamerInfo?: {
+    joinDate: string;
+    location: string;
+    website?: string;
+    schedule: string[];
+    achievements: string[];
+  };
+}> = {
   '1': {
     id: '1',
     title: 'Championship Finals - Team Alpha vs Team Omega',
@@ -27,7 +38,14 @@ const STREAMS: Record<string, StreamCardProps & { description: string }> = {
     viewerCount: 15420,
     tags: ['Tournament', 'FPS', 'Pro'],
     isLive: true,
-    description: 'Welcome to the championship finals! Today we\'re witnessing Team Alpha facing off against Team Omega in this highly anticipated match. Expect high-level gameplay and intense moments as these top teams compete for the title.'
+    description: 'Welcome to the championship finals! Today we\'re witnessing Team Alpha facing off against Team Omega in this highly anticipated match. Expect high-level gameplay and intense moments as these top teams compete for the title.',
+    streamerInfo: {
+      joinDate: 'January 2019',
+      location: 'Los Angeles, CA',
+      website: 'progamer.com',
+      schedule: ['Monday 7PM', 'Wednesday 7PM', 'Friday 8PM', 'Sunday 3PM'],
+      achievements: ['Tournament Winner 2022', '1M Followers Milestone', 'Partner Status']
+    }
   },
   '2': {
     id: '2',
@@ -42,7 +60,13 @@ const STREAMS: Record<string, StreamCardProps & { description: string }> = {
     viewerCount: 8753,
     tags: ['Casual', 'New Update', 'Exploration'],
     isLive: true,
-    description: 'Checking out the brand new update that just dropped! We\'ll explore all the new features, areas, and gameplay changes. Come hang out and let me know what you think of the new content!'
+    description: 'Checking out the brand new update that just dropped! We\'ll explore all the new features, areas, and gameplay changes. Come hang out and let me know what you think of the new content!',
+    streamerInfo: {
+      joinDate: 'March 2020',
+      location: 'Chicago, IL',
+      schedule: ['Tuesday 6PM', 'Thursday 6PM', 'Saturday 12PM'],
+      achievements: ['500K Followers Milestone', 'Rising Star Award']
+    }
   },
   // Add entries for all other streams
   '3': {
@@ -58,7 +82,36 @@ const STREAMS: Record<string, StreamCardProps & { description: string }> = {
     viewerCount: 4215,
     tags: ['Digital Art', 'Tutorial', 'Creative'],
     isLive: true,
-    description: 'Join me for a relaxing digital painting session! I\'ll be creating a fantasy landscape while sharing tips and techniques. Feel free to ask questions about digital art in the chat.'
+    description: 'Join me for a relaxing digital painting session! I\'ll be creating a fantasy landscape while sharing tips and techniques. Feel free to ask questions about digital art in the chat.',
+    streamerInfo: {
+      joinDate: 'July 2021',
+      location: 'New York, NY',
+      website: 'artportfolio.io/creativeartist',
+      schedule: ['Wednesday 5PM', 'Sunday 2PM'],
+      achievements: ['Featured Artist 2022', 'Collaboration with ArtBrands']
+    }
+  },
+  '4': {
+    id: '4',
+    title: 'Music Production Live - Creating a New Track',
+    streamer: {
+      id: 'streamer4',
+      name: 'MusicProducer',
+      avatar: 'https://ui-avatars.com/api/?name=Music&background=random'
+    },
+    thumbnail: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070&auto=format&fit=crop',
+    category: 'Music',
+    viewerCount: 3189,
+    tags: ['Production', 'Electronic', 'Live Music'],
+    isLive: true,
+    description: 'Watch me produce a new electronic track from scratch! I\'ll explain my process and techniques while taking your suggestions in real-time.',
+    streamerInfo: {
+      joinDate: 'September 2020',
+      location: 'Berlin, Germany',
+      website: 'soundcloud.com/musicproducer',
+      schedule: ['Monday 8PM', 'Friday 9PM'],
+      achievements: ['Featured on Electronic Music Weekly', 'Top Producer Award 2023', '250K Followers Milestone']
+    }
   }
 };
 
@@ -143,13 +196,74 @@ const StreamPage = () => {
                     </TabsList>
                     
                     <TabsContent value="about" className="mt-4">
-                      <div className="bg-card border border-border rounded-md p-4">
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {streamData.tags.map((tag, index) => (
-                            <span key={index} className="stream-tag">{tag}</span>
-                          ))}
+                      <div className="space-y-4">
+                        <div className="bg-card border border-border rounded-md p-4">
+                          <div className="flex flex-wrap gap-2 mb-4">
+                            {streamData.tags.map((tag, index) => (
+                              <span key={index} className="stream-tag">{tag}</span>
+                            ))}
+                          </div>
+                          <p className="text-muted-foreground">{streamData.description}</p>
                         </div>
-                        <p className="text-muted-foreground">{streamData.description}</p>
+                        
+                        {streamData.streamerInfo && (
+                          <Card>
+                            <CardContent className="p-4">
+                              <h3 className="text-lg font-medium mb-3">Streamer Profile</h3>
+                              <Separator className="mb-4" />
+                              
+                              <div className="space-y-3">
+                                <div className="flex items-center">
+                                  <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                                  <span className="text-sm">Joined: {streamData.streamerInfo.joinDate}</span>
+                                </div>
+                                
+                                <div className="flex items-center">
+                                  <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
+                                  <span className="text-sm">Location: {streamData.streamerInfo.location}</span>
+                                </div>
+                                
+                                {streamData.streamerInfo.website && (
+                                  <div className="flex items-center">
+                                    <Link className="h-4 w-4 mr-2 text-muted-foreground" />
+                                    <a 
+                                      href={`https://${streamData.streamerInfo.website}`} 
+                                      target="_blank" 
+                                      rel="noopener noreferrer"
+                                      className="text-sm text-blue-500 hover:underline"
+                                    >
+                                      {streamData.streamerInfo.website}
+                                    </a>
+                                  </div>
+                                )}
+                                
+                                <div>
+                                  <div className="flex items-center mb-2">
+                                    <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
+                                    <span className="text-sm font-medium">Regular Schedule:</span>
+                                  </div>
+                                  <ul className="pl-6 space-y-1">
+                                    {streamData.streamerInfo.schedule.map((time, index) => (
+                                      <li key={index} className="text-xs text-muted-foreground">{time}</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                                
+                                <div>
+                                  <div className="flex items-center mb-2">
+                                    <Trophy className="h-4 w-4 mr-2 text-muted-foreground" />
+                                    <span className="text-sm font-medium">Achievements:</span>
+                                  </div>
+                                  <ul className="pl-6 space-y-1">
+                                    {streamData.streamerInfo.achievements.map((achievement, index) => (
+                                      <li key={index} className="text-xs text-muted-foreground">{achievement}</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        )}
                       </div>
                     </TabsContent>
                     
