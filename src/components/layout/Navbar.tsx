@@ -2,8 +2,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Search, Bell, User, Menu } from 'lucide-react';
+import { Search, Bell, User, Menu, LogIn } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import ThemeToggle from '@/components/theme/ThemeToggle';
 
 const Navbar = () => {
   const isMobile = useIsMobile();
@@ -43,6 +44,8 @@ const Navbar = () => {
             </div>
           )}
           
+          <ThemeToggle />
+          
           <Button variant="ghost" size="icon">
             <Bell className="h-5 w-5" />
           </Button>
@@ -50,6 +53,13 @@ const Navbar = () => {
           <Link to="/profile">
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />
+            </Button>
+          </Link>
+          
+          <Link to="/sign-in">
+            <Button variant="outline" size="sm" className="hidden md:flex">
+              <LogIn className="mr-2 h-4 w-4" />
+              Sign In
             </Button>
           </Link>
           
@@ -66,6 +76,7 @@ const Navbar = () => {
           <Link to="/" className="block px-4 py-2 hover:bg-muted">Home</Link>
           <Link to="/categories" className="block px-4 py-2 hover:bg-muted">Categories</Link>
           <Link to="/following" className="block px-4 py-2 hover:bg-muted">Following</Link>
+          <Link to="/sign-in" className="block px-4 py-2 hover:bg-muted">Sign In</Link>
           <div className="px-4 py-2">
             <div className="relative">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
